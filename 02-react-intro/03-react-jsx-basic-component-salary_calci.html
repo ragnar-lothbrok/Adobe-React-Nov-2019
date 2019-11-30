@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>React Intro</title>
+    <script src="react.development.js"></script>
+    <script src="react-dom.development.js"></script>
+    <script src="babel.min.js"></script>
+    <script type="text/babel">
+        class Calculator extends React.Component {
+            state = {
+                'basic' : 0,
+                'hra' : 0,
+                'da' : 0,
+                'tax' : 0,
+                'salary' : 0
+            }
+
+            onBasicChange = (evt) => {
+                this.setState({basic : Number(evt.target.value)});
+                this.onBtnCalculateClick();
+            }
+
+            onHraChange = (evt) => {
+                this.setState({hra : Number(evt.target.value)});
+            }
+
+            onDaChange = (evt) => {
+                this.setState({da : Number(evt.target.value)});
+            }
+
+            onTaxChange = (evt) => {
+                this.setState({tax : Number(evt.target.value)});
+            }
+
+            onBtnCalculateClick = () => {
+                const gross = this.state.basic  + this.state.hra  + this.state.da;
+                const net = gross * ((100-this.state.tax )/100);
+                this.setState({salary : net});
+            }
+
+            render() {
+                return (
+                    <div>
+                        <br />
+                        <br />
+                        <section>
+                            <div className="field">
+                                <label htmlFor="">Basic :</label>
+                                <input type="number"  onChange = {this.onBasicChange} value={this.state.basic} />
+                            </div>
+                            <br />
+                            <div className="field">
+                                <label htmlFor="">HRA :</label>
+                                <input type="number" onChange = {this.onHraChange} value={this.state.hra} />
+                                
+                            </div>
+                            <br />
+                            <div className="field">
+                                <label htmlFor="">DA :</label>
+                                <input type="number" onChange = {this.onDaChange} value={this.state.da} />
+                            </div>
+                            <br />
+                            <div className="field">
+                                <label htmlFor="">Tax :</label>
+                                <input type="range" onChange = {this.onTaxChange} value={this.state.tax} />
+                            </div>
+                            <br />
+                            <div className="field">
+                                <input type="button" value="calculate" onClick = {this.onBtnCalculateClick}  />
+                            </div>
+                            <br />
+                            <div className="field">
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td id="tdBasic">{this.state.basic} </td>
+                                            <td id="tdHra">{this.state.hra} </td>
+                                            <td id="tdDa">{this.state.da} </td>
+                                            <td id="tdTax">{this.state.tax} </td>
+                                            <td id="tdSalary">{this.state.salary} </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>
+                    </div>
+                )
+            }
+        }
+        ReactDOM.render(
+            <div>
+                <Calculator/>
+            </div>, document.getElementById('root'))
+
+    </script>
+</head>
+<body>
+    <div id="root"></div>
+</body>
+</html>

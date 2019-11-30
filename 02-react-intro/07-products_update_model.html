@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Products</title>
+    <script src="react.development.js"></script>
+    <script src="react-dom.development.js"></script>
+    <script src="babel.min.js"></script>
+    <script type="text/babel">
+
+        function ProductModel(){
+
+            var _data = {
+                productText : "",
+                productList : []
+            };
+
+            this.toJSON = function(){
+                return { ..._data };
+            };
+
+            this.get = function(attrName){
+                return _data[attrName];
+            };
+
+            //behavior
+            ProductModel.prototype['addProduct'] = function(){
+                this.get('productList').push(this.get('productText'));
+                _callbacks.forEach(callback => {
+                    if (typeof callback === 'function')
+                        callback();
+                });
+            }
+
+            this.set = function(attrName, value){
+                if (_data[attrName] === value) return;
+                _data[attrName] = value;
+            };
+
+            var _callbacks = [];
+
+            this.subscribe = function(callback){
+                _callbacks.push(callback);
+            }
+        }
+
+        let model = new ProductModel();
+
+        class Products extends React.Component{
+            render(){
+                const { model } = this.props,
+                    data = model.toJSON();
+                let productElements = data.productList.map((product, index) => (<li key={index}>{product}</li>));
+                console.dir(productElements);
+                return(
+                    <div>
+                        <h1>Products</h1>
+                        <hr />
+                        <label htmlFor="">Product Name : </label>
+                        <input type="text" name="" id="" onChange={ evt => model.set('productText', evt.target.value)}/>
+                        <input type="button" value="Add New" onClick={ () => model.addProduct() }/>
+                        <ol>
+                            {productElements}
+                        </ol>
+                    </div>
+                )
+            }
+        }
+    
+        function renderProducts(){
+            ReactDOM.render(<Products model={model}/>,
+            document.getElementById('root'));          
+        }
+        renderProducts();
+        model.subscribe(renderProducts);
+    </script>
+</head>
+<body>
+    <div id="root">
+
+    </div>
+</body>
+</html>

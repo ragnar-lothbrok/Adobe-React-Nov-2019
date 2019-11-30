@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Products</title>
+    <script src="../02-react-intro/react.development.js"></script>
+    <script src="../02-react-intro/react-dom.development.js"></script>
+    <script src="../02-react-intro/babel.min.js"></script>
+    <script src="state-manager.js"></script>
+    <script type="text/babel">
+
+        function spinnerReducer(currentState = 100, action){
+            if (action.type === 'INCREMENT') return currentState + 1;
+            if (action.type === 'DECREMENT') return currentState - 1;
+            return currentState;
+        }
+        var store = SM.createStore(spinnerReducer)
+
+        class CustomButton extends React.Component{
+            render(){
+                const { store, type } = this.props;
+                return(
+                    <div>
+                        <input type="button" value={type} onClick={ () => store.dispatch({'type':type})}/>
+                    </div>
+                )
+            }
+        }
+
+        class CustomLabel extends React.Component{
+            render(){
+                const { store } = this.props;
+                return(
+                    <div>
+                        <label>{store.getState()}</label>
+                    </div>
+                )
+            }
+        }
+    
+        function render(){
+            ReactDOM.render(<div> <div><CustomButton store={store} type="INCREMENT"/> </div><CustomLabel store={store}/> <div><CustomButton store={store} type="DECREMENT"/> </div></div>,
+            document.getElementById('root'));          
+        }
+        render();
+        store.subscribe(render);
+        store.subscribe(() => console.log(store.getState()));
+    </script>
+</head>
+<body>
+    <div id="root">
+
+    </div>
+</body>
+</html>
