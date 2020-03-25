@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Bug Tracker</title>
+    <style>
+        body{
+            margin-left: 50px;
+        }
+        section{
+            margin-bottom: 10px;
+        }
+        .stats, .bugname{
+            font-size: 18pt;
+        }
+        .bugname{
+            cursor: pointer;
+        }
+        .closed{
+            color : red;
+            text-decoration: line-through;
+            font-style: italic;
+            font-weight: bold;
+        }
+        ol{
+            list-style: none;
+            width : 500px;
+            -webkit-padding-start: 0px;
+        }
+        li{
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #e7e7e7;
+            border : 2px solid gray;
+        }
+    </style>
+    <script src="react.development.js"></script>
+    <script src="react-dom.development.js"></script>
+    <script src="babel.min.js"></script>
+
+    <script type="text/babel">
+        
+        let currentBugId = 0;
+        class BugTracker extends React.Component{
+
+            constructor(props) {
+                super(props);
+                this.state = {
+                    bugs: []
+                };
+                this.addNew = this.addNew.bind(this)
+            }
+
+            addNew = function(newBugName){
+                const newBug = { 
+                    id : ++currentBugId, 
+                    name : newBugName, 
+                    isClosed : false, 
+                    createdAt : new Date()
+                };
+                console.log(newBug)
+                console.log(this.state)
+                let exBugs = this.state.bugs;
+                exBugs.push(newBug)
+                this.setState({'bugs': exBugs});
+            };
+
+            render(){
+                let { bugs } = this.state;
+                return(
+                    <div>
+                        <BugAdd addNew={this.addNew} />
+                        <BugList bugs={bugs}/>
+                    </div>
+                )
+            }
+        }
+
+        class BugList extends React.Component {
+            render(){
+                const { bugs} = this.props;
+                console.log(bugs)
+                const bugItems = bugs.map((bug, index) => (
+                    <BugItem bug={bug} key={index}/>
+                ));
+                return(
+                    <section className="list">
+                        <ol>
+                            {bugItems}
+                        </ol>
+                    </section>
+                )
+            }
+        }
+
+        class BugItem extends React.Component {
+            render() {
+                const { bug } = this.props;
+                return (
+                    <li>
+                        <label htmlFor="">Bug Id : {bug.id}</label>
+                        <br />
+                        <label htmlFor="">Bug Name : {bug.name}</label>
+                        <div className="datetime">[{bug.createdAt.toString()}]</div>
+                    </li>
+                )
+            }
+        }
+
+        class BugAdd extends React.Component{
+            state = {
+                newBugName: ''
+            };
+            render(){
+                let { addNew } = this.props,
+                    { newBugName } = this.state;
+                return(
+                    <section className="edit">
+                        <label htmlFor="">Bug Name : </label>
+                        <input type="text" onChange={evt => this.setState({ newBugName: evt.target.value })} />
+                        <input type="button" value="Add New" onClick={() => addNew(newBugName)} />
+                    </section>
+                )
+            }
+        }
+
+        function renderBugTracker(){
+            ReactDOM.render(<BugTracker/>,
+                document.getElementById('root'))            
+        }
+        renderBugTracker();
+    </script>
+</head>
+<body>
+    <h1>Bug Tracker</h1>
+    <hr>
+    <div id="root"></div>
+</body>
+</html>

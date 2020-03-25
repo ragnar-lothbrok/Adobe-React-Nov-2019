@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>React Intro</title>
+    <script src="react.development.js"></script>
+    <script src="react-dom.development.js"></script>
+    <script>
+        (function(){
+            window.addEventListener('load', init);
+            function init(){
+                var btnRender = document.getElementById('btnRender');
+                btnRender.addEventListener('click', onBtnRenderClick);
+            }
+            var counter = 0;
+            function onBtnRenderClick(){
+                ++counter;
+                var appEle = React.createElement('div', null, 
+                    React.createElement('h1', null, 'Welcome to React.js'),
+                    React.createElement('div', null,
+                        React.createElement('span', null, 'Counter : '),
+                        React.createElement('span', null, counter),
+                        React.createElement('br', null, null),
+                        React.createElement('span', null, counter % 2 === 0 ? 'Even' : 'Odd')
+                    ),
+                    React.createElement('hr'),
+                    React.createElement('section', null, 
+                        React.createElement('h3', null, 'Introduction'),
+                        React.createElement('p', null, 'React is a JavaScript library for building user interfaces. It is maintained by Facebook and a community of individual developers and companies.')
+                    ),
+                    React.createElement('section', null,
+                        React.createElement('h3', null, 'Advantages'),
+                        React.createElement('ol', null,
+                            React.createElement('li', null, 'Efficient'),
+                            React.createElement('li', null, 'Declarative'),
+                            React.createElement('li', null, 'Component-Based'),
+                            React.createElement('li', null, 'Learn Once, Write Anywhere')
+                        )
+                    )
+                );
+                ReactDOM.render(appEle, document.getElementById('root'))
+            }
+        })();
+    </script>
+</head>
+<body>
+    <input type="button" value="Render" id="btnRender">
+    <div id="root"></div>
+</body>
+</html>
